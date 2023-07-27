@@ -30,23 +30,28 @@ impl Triangle {
     }
 
     pub fn is_valid(&self) -> bool {
-        let (x1, y1) = self.p1;
-        let (x2, y2) = self.p2;
-        let (x3, y3) = self.p3;
-        let (w, h) = (self.worker.w, self.worker.h);
+        const MIN_DEGREE: f64 = 15.0;
 
-        if x1 < 0 || x1 >= w || y1 < 0 || y1 >= h {
-            return false;
-        }
+        let x1 = (self.p2.0 - self.p1.0) as f64;
+        let x2 = (self.p3.0 - self.p2.0) as f64;
+        let x3 = (self.p1.0 - self.p3.0) as f64;
 
-        if x2 < 0 || x2 >= w || y2 < 0 || y2 >= h {
-            return false;
-        }
+        let y1 = (self.p2.1 - self.p1.1) as f64;
+        let y2 = (self.p3.1 - self.p2.1) as f64;
+        let y3 = (self.p1.1 - self.p3.1) as f64;
 
-        if x3 < 0 || x3 >= w || y3 < 0 || y3 >= h {
-            return false;
-        }
+        let d1 = (x1 * x1 + y1 * y1).sqrt();
+        let d2 = (x2 * x2 + y2 * y2).sqrt();
+        let d3 = (x3 * x3 + y3 * y3).sqrt();
 
-        true
+        let a1 = degrees(((x1 * x2 + y1 * y2) / (d1 * d2)).acos());
+        let a2 = degrees(((x2 * x3 + y2 * y3) / (d2 * d3)).acos());
+        let a3 = degrees(((x3 * x1 + y3 * y1) / (d3 * d1)).acos());
+
+        a1 > MIN_DEGREE && a2 > MIN_DEGREE && a3 > MIN_DEGREE
     }
+}
+
+fn degrees(radians: f64) -> f64 {
+    radians * 180.0 / std::f64::consts::PI
 }
