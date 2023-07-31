@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 # gtk = "0.17.1"
-image = "0.24.6"
-rand = "0.8.5"
+image = "0.24"
+rand = "0.8"
